@@ -1,0 +1,7 @@
+{
+    "alphaX" : 0.15,
+    "alphaY" : 0.15,
+    "Cs" : [1,1,1,1],
+    "Cd" : [1,1,1,1],
+    "isotropic" : true
+}

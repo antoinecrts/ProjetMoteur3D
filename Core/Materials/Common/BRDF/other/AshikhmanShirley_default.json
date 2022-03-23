@@ -1,0 +1,8 @@
+{
+    "Rs" : 0.1,
+    "Rd" : 1,
+    "nu" : 100,
+    "nv" : 100,
+    "isotropic" : true,
+    "coupled_diffuse": true
+}

@@ -1,0 +1,19 @@
+﻿C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(367,5): warning MSB8004: Intermediate Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Intermediate Directory.
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(368,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
+  Main.cpp
+  SampleEngine.cpp
+  BaseMaterial.cpp
+  GoblimApplication.cpp
+c:\users\giletp01\desktop\goblim-student-master-dadd930e2a2a6411340e2ae54a55ac3a18b99d2d\myproject\sources\goblimapplication.cpp(152): warning C4244: 'argument' : conversion de 'double' en 'int', perte possible de données
+c:\users\giletp01\desktop\goblim-student-master-dadd930e2a2a6411340e2ae54a55ac3a18b99d2d\myproject\sources\goblimapplication.cpp(321): warning C4244: '-=' : conversion de 'double' en 'float', perte possible de données
+c:\users\giletp01\desktop\goblim-student-master-dadd930e2a2a6411340e2ae54a55ac3a18b99d2d\myproject\sources\goblimapplication.cpp(356): warning C4390: ';' : une instruction contrôlée a été trouvée vide ; est-ce ce que vous souhaitiez ?
+c:\users\giletp01\desktop\goblim-student-master-dadd930e2a2a6411340e2ae54a55ac3a18b99d2d\myproject\sources\goblimapplication.cpp(432): warning C4244: 'argument' : conversion de 'double' en 'float', perte possible de données
+c:\users\giletp01\desktop\goblim-student-master-dadd930e2a2a6411340e2ae54a55ac3a18b99d2d\myproject\sources\goblimapplication.cpp(441): warning C4244: 'argument' : conversion de 'double' en 'const int', perte possible de données
+  SampleEngine_Deferred.cpp
+LINK : warning LNK4098: conflit entre la bibliothèque par défaut 'MSVCRT' et les autres bibliothèques ; utilisez /NODEFAULTLIB:library
+SOIL.lib(image_DXT.obj) : warning LNK4099: PDB 'SOIL.pdb' n'a pu être trouvé avec 'SOIL.lib(image_DXT.obj)' ou sur 'C:\Users\giletp01\Desktop\GobLim-Student-master-dadd930e2a2a6411340e2ae54a55ac3a18b99d2d\MyProject\SOIL.pdb' ; l'objet sera lié sans informations de débogage
+SOIL.lib(image_helper.obj) : warning LNK4099: PDB 'SOIL.pdb' n'a pu être trouvé avec 'SOIL.lib(image_helper.obj)' ou sur 'C:\Users\giletp01\Desktop\GobLim-Student-master-dadd930e2a2a6411340e2ae54a55ac3a18b99d2d\MyProject\SOIL.pdb' ; l'objet sera lié sans informations de débogage
+SOIL.lib(SOIL.obj) : warning LNK4099: PDB 'SOIL.pdb' n'a pu être trouvé avec 'SOIL.lib(SOIL.obj)' ou sur 'C:\Users\giletp01\Desktop\GobLim-Student-master-dadd930e2a2a6411340e2ae54a55ac3a18b99d2d\MyProject\SOIL.pdb' ; l'objet sera lié sans informations de débogage
+SOIL.lib(stb_image_aug.obj) : warning LNK4099: PDB 'SOIL.pdb' n'a pu être trouvé avec 'SOIL.lib(stb_image_aug.obj)' ou sur 'C:\Users\giletp01\Desktop\GobLim-Student-master-dadd930e2a2a6411340e2ae54a55ac3a18b99d2d\MyProject\SOIL.pdb' ; l'objet sera lié sans informations de débogage
+  MyProject.vcxproj -> C:\Users\giletp01\Desktop\GobLim-Student-master-dadd930e2a2a6411340e2ae54a55ac3a18b99d2d\MyProject\.\MyProject.exe
+  MyProject.vcxproj -> .\MyProject.pdb (Full PDB)

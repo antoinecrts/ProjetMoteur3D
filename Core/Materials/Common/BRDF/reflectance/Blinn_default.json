@@ -1,0 +1,6 @@
+{
+    "n" : 10,
+    "ior" : 1.5,
+    "include_Fresnel": false,
+    "divide_by_NdotL" : true
+}

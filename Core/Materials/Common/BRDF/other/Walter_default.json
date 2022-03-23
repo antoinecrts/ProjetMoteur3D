@@ -1,0 +1,5 @@
+{
+    "alphaG": 0.1,
+    "ior" : 2,
+    "useFresnel" : false
+}

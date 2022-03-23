@@ -1,0 +1,1239 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"light",
+				"lightingModel"
+			],
+			[
+				"inti",
+				"initialisation"
+			],
+			[
+				"texture",
+				"texture_spark"
+			],
+			[
+				"PostP",
+				"PostProcess"
+			],
+			[
+				"Deferre",
+				"DeferredEngineGL"
+			],
+			[
+				"focal",
+				"focalBlurSize"
+			],
+			[
+				"list_",
+				"list_ai"
+			],
+			[
+				"NBT",
+				"NTURB_STRAT"
+			],
+			[
+				"uni",
+				"uniform_0_1"
+			],
+			[
+				"unf",
+				"uniform_0_1"
+			],
+			[
+				"uniform",
+				"uniform_0_1"
+			],
+			[
+				"uniform_",
+				"uniform_0_1"
+			],
+			[
+				"getR",
+				"getResource"
+			],
+			[
+				"Strates",
+				"stratesSup"
+			],
+			[
+				"time",
+				"timecounter"
+			],
+			[
+				"glGene",
+				"glGenTextures"
+			],
+			[
+				"m_",
+				"m_TextureId"
+			],
+			[
+				"nb",
+				"nbStrates"
+			],
+			[
+				"ressource",
+				"ressourceObjPath"
+			],
+			[
+				"update",
+				"updateBoxKernel"
+			],
+			[
+				"dele",
+				"deleteSelectedNoise"
+			],
+			[
+				"selected",
+				"selected_box"
+			],
+			[
+				"box",
+				"box"
+			],
+			[
+				"b",
+				"boxNoiseEditor"
+			],
+			[
+				"GLFW",
+				"GLFWGPUBoxNoiseEditor"
+			],
+			[
+				"sceneLoader",
+				"sceneloader"
+			],
+			[
+				"get",
+				"getRoot"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"contents": "#include \"BaseMaterial.h\"\n#include \"Engine/Base/Node.h\"\n#include \"Engine/Base/Scene.h\"\n\n\nBaseMaterial::BaseMaterial(std::string name):\n\tMaterialGL(name,\"BaseMaterial\")\n{\n\t\n\tmodelViewProj = vp->uniforms()->getGPUmat4(\"MVP\");\n}\nBaseMaterial::~BaseMaterial()\n{\n\n}\n\nvoid BaseMaterial::setColor(glm::vec4 &c)\n{\n\t\n}\n\nvoid BaseMaterial::render(Node *o)\n{\n\n\tmodelViewProj->Set(o->frame()->getTransformMatrix());\n\t\n\tif (m_ProgramPipeline)\n\t{\t\t\n\t\tm_ProgramPipeline->bind();\n\t\to->drawGeometry(GL_TRIANGLES);\n\t\tm_ProgramPipeline->release();\n\t}\n}\n\nvoid BaseMaterial::update(Node* o,const int elapsedTime)\n{\n\t\n\t\n\n}\n",
+			"file": "/media/giletp01/Dev/Dev/TestGStudent/MyProject/Materials/BaseMaterial/BaseMaterial.cpp",
+			"file_size": 601,
+			"file_write_time": 131497758588802001,
+			"settings":
+			{
+				"buffer_size": 601,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "/**\n *\n * @author     G.Gilet, Guillaume.Gilet@unilim.fr\n * @date       20 August 2017\n * @version    1.0 \n */\n\n#ifndef _ENGINE_GL_H\n#define _ENGINE_GL_H\n\n#include <map>\n#include <string>\n#include <stack>\n#include <GL/glew.h>\n#include \"Engine/Base/Engine.h\"\n#include \"Engine/Base/NodeCollectors/StandardCollector.h\"\n\n#include \"Materials/LightMaterial/LightMaterial.h\"\n#include \"GPUResources/Query/GPUQuery.h\"\n#include \"Engine/OpenGL/Lighting/LightingModelGL.h\"\n#include \"Materials/BoundingBoxMaterial/BoundingBoxMaterial.h\"\n\n#include \"GPUResources/GPUInfo.h\"\n#include \"EngineGLState.h\"\n\n/**\n * @brief      This class is the parent class for creating an forward rendering engine using OpenGL\n *\n * @details    Each project should have its own engine which inherit this parent engine\n *\n */\n\nclass EngineGL : public Engine\n{\n\tpublic:\n\t/**\n\t * @brief\tCreates an forward rendering engine\n\t * @details Creates an forward rendering engine with predefined cameraGL, timers objects and a LightingModelGL\n\t * @param\twidth as rendering frame width\n\t * @param\theight as rendering frame height\t\t\n\t */\n\tEngineGL(int width, int height); \n\t/**\n\t * @brief      Destroy an engine\n\t */\n\n\t~EngineGL();\n\t/**\n\t * @brief\tInitialize the scene and various objects (node, models, materials, effects, FBO...) used by the engine\n\t * @param\tfilename of a target scene in a known format (.DAE,.3DS,.OBJ)\n\t * @return success of the initialization\t\t\n\t */\n\n\tvirtual bool init(std::string filename=\"\");\n\t/**\n\t * @brief\tLoad a Scene according to the provided filename\n\t * @param\tfilename of a target scene in a known format (.DAE,.3DS,.OBJ)\n\t * @return success of the loading operation\t\t\n\t */\n\tvirtual bool loadScene(std::string filename);\n\t/**\n\t * @brief\tRender the scene. In the parent class, this is a forward rendering of each node of the scene\n\t */\n\tvirtual void render();\n\t/**\n\t * @brief\tAnimate the scene. This function should provide update for camera movement, node animation (by calling the animate function of each node) and update the lighting and common buffers. \n\t */\n\tvirtual void animate(const int elapsedTime);\n\n\t/**\n\t * @brief\tResize the viewport\n\t * @param\tw as width of the viewport\n\t * @param\th as height of the viewport\t\n\t */\n\n\tvirtual void onWindowResize(int w,int h);\n\t/**\n\t * @brief\tGet Time stamp of the last rendered frame\n\t * @return timestamp of the last rendered frame\n\t */\n\tdouble getFrameTime();\n\t/**\n\t * @brief\tGet width of the current frame\n\t * @return width of the frame\n\t */\n\tint getWidth();\n\t/**\n\t * @brief\tGet height of the current frame\n\t * @return height of the frame\n\t */\n\tint getHeight();\n\n\tvoid setWidth(int w); \n\t/**\n\t * @brief\tSet width of the current frame\n\t * @param w width of the frame\n\t */\n\tvoid setHeight(int h);\n\t/**\n\t * @brief\tSet height of the current frame\n\t * @param h height of the frame\n\t */\n\n\tbool drawLights;\n\tbool drawBoundingBoxes;\n\n\t/**\n\t * @brief\tAdd a light to the scene. Helper function to quickly add lights to the scene\n\t * @details Create a LighNode and add it to the top node of the scene\n\t * @param name name of the light\n\t * @param position position of the light\n\t * @param color color of the light\n\t * @param type type of the light (not available for now : use SPOT_LIGHT)\n\t * @param lMat a valid Material for rendering the light. If NULL , create a standard lightMaterial \n\t */\n\n\tvoid addLight(string name, glm::vec3 position,  glm::vec4 color = glm::vec4(1.0),int type = SPOT_LIGHT, LightMaterial* lMat = NULL);\n\t\t/**\n\t * @brief\tAdd a Object to the scene. Helper function to quickly add obects to the scene\n\t * @details Create a Node, load its geometricModelGL with a valid object defined by its filename, and add it to the top node of the scene\n\t * @param name name of the node \n\t * @param path name of the file containing the geometric model for this node\n\t * @param m a valid material for rendering the node\n\t * @param scale scale operation applid to the node frame\t \n\t * @param translate translate operation applid to the node frame\n\t * @param rotate rotate operation applid to the node frame\n\t */\n\tvoid addObject(string name, string path, Material* m, glm::vec3 scale = glm::vec3(1.0), glm::vec3 translate = glm::vec3(0.0), glm::vec4 rotate = glm::vec4(0.0));\n\t/**\n\t * @brief\tDraw Bounding Boxes and lights. Not in use for now\n\t */\n\tvoid drawBBAndLight();\n\t/**\n\t * @brief\tDefine the background color\n\t * @param color the background color\n\t */\n\tvoid setClearColor(glm::vec4 color);\n\t/**\n\t * @brief\tPrepare the engine for rendering. Should be called at the end of init\n\t * @details Set up the engine. Parse nodes using standard collectors, bind and populates the lighting model with LightNodes\n\t */\t\n\tvirtual void setUpEngine();\n\t/**\n\t * @brief\tDisplay interface for the engine (using imgui)\n\t */\t\n\tvirtual void displayInterface();\n\nprotected:\n\tint w_Width;\n\tint w_Height;\n\n\tNodeCollector *allNodes;\n\tNodeCollector *renderedNodes;\n\n\tLightingModelGL *lightingModel;\n\tBoundingBoxMaterial *boundingBoxMat;\n\t \n\tGPUQuery* timeQuery;\n\n\tEngineGLState* glState;\n\t\n\n};\n#endif\n",
+			"file": "/media/giletp01/Dev/Dev/TestGStudent/Core/Engine/OpenGL/EngineGL.h",
+			"file_size": 5011,
+			"file_write_time": 131497759038384290,
+			"settings":
+			{
+				"buffer_size": 5011,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "/*\n *\t(c) XLim, UMR-CNRS\n *\tAuthors: G.Gilet\n *\n */\n#include <string>\n#include \"EngineGL.h\"\n#include \"Engine/OpenGL/Lighting/LightingModelGL.h\"\n#include \"SceneLoaderGL.h\"\n#include \"Engine/Base/NodeCollectors/MeshNodeCollector.h\"\n#include \"Engine/Base/NodeCollectors/FCCollector.h\"\n\n\n\nEngineGL::EngineGL(int width, int height):\nEngine()\n{\n\tthis->scene = Scene::getInstance();\n\tthis->allNodes = new StandardCollector();\n\n\tthis->renderedNodes = new MeshNodeCollector();\n\tw_Width = width;\n\tw_Height = height;\n\tthis->lightingModel = NULL;\t\n\t\n\ttimeQuery = new GPUQuery(\"Timer\",GL_TIME_ELAPSED);\n\tscene->needupdate = true;\t\n\tdrawLights = false;\n\tdrawBoundingBoxes = false;\n\n\tLOG_INFO << \"Initializing Scene\" << std::endl;\n\t// timeQuery->create ();\n\n\tLOG_INFO << GPUInfo::Instance()->getOpenGLVersion() << std::endl;\n\n\t// Load shaders in \"\\common\" into graphic cards\n\tGLProgram::prgMgr.addPath(ressourceMaterialPath + \"Common\", \"\");\t\n\tGLProgram::prgMgr.addPath(ressourceCoreMaterialPath + \"Common\", \"\");\n\n\n\t\t// Create Bounding Box Material for bounding box rendering\n\tboundingBoxMat = new BoundingBoxMaterial (\"BoundingBoxMat\");\n\n\tglState = EngineGLState::getInstance();\n\n\t// OpenGL state variable initialisation\n\tglClearColor(1.0, 1.0, 1.0, 1.0);\n\n\tglEnable(GL_DEPTH_TEST);\n\tglState->setViewport(glm::ivec4(0, 0, width, height));\n\tglState->pushViewport();\n\t// Create Lighting Model GL and collect all light nodes of the scene \n\tlightingModel = new LightingModelGL(\"LightingModel\", scene->getRoot());\n}\n\nEngineGL::~EngineGL()\n{\n\tif (allNodes != NULL)\n\t{\n\t\tdelete allNodes;\n\t\tallNodes = NULL;\n\t}\n\tif (renderedNodes != NULL)\n\t{\n\t\tdelete renderedNodes;\n\t\trenderedNodes = NULL;\n\t}\n} \n\nbool EngineGL::init(std::string filename)\n{\n\t\n\t// Loading a scene or a mesh and add it to the root of the Engine scenegraphe\n\n\tif (!loadScene(filename))\n\t\tloadScene(ressourceCoreObjPath + \"Sphere.obj\");\n\n\tsetUpEngine();\n\treturn(true);\n}\nbool EngineGL::loadScene(std::string filename)\n{\n\tSceneLoaderGL* sceneloader = new SceneLoaderGL();\n\tNode* sceneLoaded = sceneloader->loadScene(filename);\n\tif (sceneLoaded != NULL)\n\t\tscene->getSceneNode()->adopt(sceneLoaded);\n\n\tdelete sceneloader;\n\n\treturn (sceneLoaded != NULL);\n}\nvoid EngineGL::setUpEngine()\n{\n\t\n\t// Force window Resize\n\tthis->onWindowResize(w_Width, w_Height);\n\n\t// Bind the light buffer for rendering\n\tlightingModel->bind();\n\n\tallNodes->collect(scene->getRoot());\n\n\trenderedNodes->collect(scene->getRoot());\n\n\tfor (unsigned int i = 0; i < allNodes->nodes.size(); i++)\n\t\tallNodes->nodes[i]->animate(0);\n\n\tScene::getInstance()->camera()->updateBuffer();\n}\n\nvoid EngineGL::render()\n{\n\t\t// Begin Time query\n\t\t// timeQuery->begin();\n\n\t\t// Clear Buffer\n\t\tglClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);\n\n\t\t// Rendering every collected node\n\t\tfor (unsigned int i = 0; i < renderedNodes->nodes.size(); i++) \n\t\t\trenderedNodes->nodes[i]->render();\n\t\t// end time Query\t\t\t\t\t\n\t\t// timeQuery->end();\n\n\t\tif (drawLights)\n\t\t\tlightingModel->renderLights();\n\n\t\tif (drawBoundingBoxes)\n\t\t\tfor (unsigned int i = 0; i < renderedNodes->nodes.size(); i++) \n\t\t\t\trenderedNodes->nodes[i]->render(boundingBoxMat);\n\n\t\t// scene has been rendered : no need for recomputing values until next camera/parameter change\n\t\t//Scene::getInstance()->camera()->setUpdate(true);\n\t\tscene->needupdate = false;\t\n}\n\nvoid EngineGL::animate(const int elapsedTime)\n{\n\t//dynamic_cast<FCCollector*> (renderedNodes)->updateCam();\n\t// Collect all relevant nodes\n\t//renderedNodes->collect(scene->getRoot());\n\t// Animate each node\n\tfor (unsigned int i = 0; i < allNodes->nodes.size(); i++)\n\t\tallNodes->nodes[i]->animate(elapsedTime);\n\t// force update of lighting model\n\tScene::getInstance()->camera()->updateBuffer();\n\tlightingModel->update(true); \n}\n\nvoid EngineGL::onWindowResize(int width, int height)\n{\n\t\n\tglState->setViewport(glm::ivec4(0, 0, width, height));\n\tscene->camera()->setAspectRatio((float)width / (float)height);\n\tw_Width = width;\n\tw_Height = height;\n\n\tif (lightingModel != NULL)\n\t\tlightingModel->setWindowSize(glm::vec2(width, height));\n\t\t\n}\n\nvoid EngineGL::setWidth(int w)\n{\n\tw_Width = w;\n}\nvoid EngineGL::setHeight(int h)\n{\n\tw_Height = h;\n}\n\nint EngineGL::getWidth()\n{\n\treturn w_Width;\n}\n\nint EngineGL::getHeight()\n{\n\treturn w_Height;\n}\ndouble EngineGL::getFrameTime()\n{\n\tdouble frame_time = timeQuery->getResultUInt();\n\t//double frame_time = 5;\n\tframe_time = frame_time*0.000001;\n\treturn frame_time;\n}\n\nvoid EngineGL::addObject(string name, string path,Material* m, glm::vec3 scale, glm::vec3 translate, glm::vec4 rotate) {\n\tNode* sceneLoaded = Scene::getInstance()->getNode(name);\n\tModelGL *baseModel = Scene::getInstance()->getModel<ModelGL>(path);\n\n\tsceneLoaded->frame()->translate(translate);\n\tsceneLoaded->frame()->scale(scale);\n\n\tif (rotate.x != 0 || rotate.y != 0 || (rotate.z != 0 && rotate.w != 0))\n\t\tsceneLoaded->frame()->rotate(glm::vec3(rotate), rotate.w);\n\n\tsceneLoaded->setModel(baseModel);\n\tsceneLoaded->setMaterial(m, true);\n\tScene::getInstance()->getSceneNode()->adopt(sceneLoaded);\n}\nvoid EngineGL::addLight(string name, glm::vec3 position,  glm::vec4 color,int type, LightMaterial* lMat) \n{\n\tLOG_TRACE << \"Adding Light : \" << name << std::endl;\n\tLightNode *lnode = Scene::getInstance()->getNodes<LightNode>(name);\n\n\n\tlnode->setModel(Scene::getInstance()->getModel<ModelGL>(ressourceCoreObjPath + \"Sphere.obj\"));\n\n\tif (lMat == NULL)\n\t\tlMat =  new LightMaterial (\"LightMaterial-\" + name, color);\n\n\n\tlnode->setMaterial(lMat);\n\n\tScene::getInstance()->getSceneNode()->adopt(lnode);\n\n\tlnode->frame()->translate(position);\n\tlnode->frame()->scale(glm::vec3(20.0, 20.0, 20.0));\n\tlnode->setPosition(glm::vec4(position, 0.0));\n\tlnode->setType(type);\n\tlnode->setColor(color);\n\tlightingModel->collect();\n}\n\nvoid EngineGL::drawBBAndLight()\n{\n\tif (drawLights)\n\t\tlightingModel->renderLights();\n\n\tif (drawBoundingBoxes)\n\t\tfor (unsigned int i = 0; i < renderedNodes->nodes.size(); i++)\n\t\t\trenderedNodes->nodes[i]->render(boundingBoxMat);\n}\nvoid EngineGL::setClearColor(glm::vec4 color)\n{\n\tglClearColor(color.x,color.y,color.z,color.w);\n}\n\nvoid EngineGL::displayInterface()\n{\n\tif (ImGui::BeginMainMenuBar())\n\t{\n\t\tif (ImGui::BeginMenu(\"Lighting\"))\n\t\t{\n\t\t\tImGui::MenuItem(\"Lighting Model\", NULL, &(lightingModel->show_interface));\t\t\n\t\t\tImGui::EndMenu();\n\t\t}\n\t\tif (lightingModel->show_interface)\n\t\t\tlightingModel->displayInterface(lightingModel->getName().c_str());\n\t\tImGui::EndMainMenuBar();\n\t}\n\n}",
+			"file": "/media/giletp01/Dev/Dev/TestGStudent/Core/Engine/OpenGL/EngineGL.cpp",
+			"file_size": 6397,
+			"file_write_time": 131497761106256987,
+			"settings":
+			{
+				"buffer_size": 6394,
+				"encoding": "UTF-8 with BOM",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "#include \"LightingModel.h\"\n#include \"Engine/Base/Scene.h\"\n\nLightingModel::LightingModel(std::string name,unsigned int ShadowTypeInfo)\n{\n\tm_Name = name;\n\trootNode = NULL;\n\tneedUpdate = true;\n\tcollector = new LightCollector();\n\tShadowType = ShadowTypeInfo;\n\tshow_interface = false;\n}\n\nLightingModel::~LightingModel()\n{\n\n}\n\nstd::string LightingModel::getName()\n{\n\treturn m_Name;\n}\nvoid LightingModel::collect(Node *_rootNode)\n{\n\tif (_rootNode == NULL)\n\t\tcollector->collect(rootNode);\n\telse\n\t\tcollector->collect(_rootNode);\n}\n\nvoid LightingModel::setCollector(NodeCollector *collector)\n{\n\tif (collector != NULL)\n\t\tdelete collector;\n\tthis->collector = collector;\n}\n\nvoid LightingModel::update()\n{\n\tfor (vector< Node* >::iterator it = collector->nodes.begin(); it != collector->nodes.end(); ++it)\n\t{\n\t\tLightNode *lnode = dynamic_cast<LightNode*> (*it); \n\t\tif (lnode != NULL && lnode->frame()->updateNeeded())\n\t\t{\n\t\t\tlnode->setPosition(glm::vec4(lnode->frame()->convertPtTo(glm::vec3(0.0),Scene::getInstance()->getRoot()->frame()),1.0));\n\t\t\tneedUpdate = true;\n\t\t}\n\t}\n}\n\n\n\nstd::vector<Node*> LightingModel::getNodes()\n{\n\treturn collector->nodes;\n}\n\nvoid LightingModel::displayInterface(const char* title)\n{\n\n}",
+			"file": "/media/giletp01/Dev/Dev/TestGStudent/Core/Engine/Base/Lighting/LightingModel.cpp",
+			"file_size": 1201,
+			"file_write_time": 131496835210000000,
+			"settings":
+			{
+				"buffer_size": 1201,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "#pragma once\n#include \"Utils/Singleton.h\"\n#include <GL/glew.h>\n#include <glm/glm.hpp>\n#include <stack>\nclass EngineGLState : public Singleton<EngineGLState>\n{\n\tfriend class Singleton<EngineGLState>;\n\n\tpublic:\n\t\tvoid setViewport(glm::ivec4 vp);\n\t\tvoid pushViewport();\n\t\tvoid popViewport();\n\t\tvoid reset();\n\tprivate:\n\t\tEngineGLState();\n\t\t//~EngineGLState();\n\n\t\tstd::stack <glm::ivec4> m_ViewportState;\n\t\tglm::ivec4 m_CurrentViewport;\n\t\t\n\n};",
+			"file": "/media/giletp01/Dev/Dev/TestGStudent/Core/Engine/OpenGL/EngineGLState.h",
+			"file_size": 438,
+			"file_write_time": 131497759282814599,
+			"settings":
+			{
+				"buffer_size": 438,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "#include <sstream>\n#include \"GPUFBO.h\"\n#include \"Engine/OpenGL/EngineGL.h\"\n#include \"Engine/OpenGL/MaterialGL.h\"\n#include \"Effects/DisplayResource/DisplayResource.h\"\n#include \"Effects/DisplayLayer/DisplayLayer.h\"\n#include \"GPUResources/Textures/GPUTexture2D.h\"\n#include \"Utils/GLError.h\"\n#include \"Utils/ImageUtilities/image_DXT.h\"\n//\n#include \"GPUResources/GPUInfo.h\"\n\n\n#include <cmath>\n\nstatic GLenum buffers[8] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3, GL_COLOR_ATTACHMENT4, GL_COLOR_ATTACHMENT5, GL_COLOR_ATTACHMENT6, GL_COLOR_ATTACHMENT7 };\n\n\nstd::string toStr(int a)\n{\n\tstd::ostringstream oss;\n\toss << a;\n\treturn(oss.str());\n}\n\n\n\nGPUFBO::GPUFBO(std::string name):\n\tResource(name)\n{\n\tm_width = 0;\n\tm_height = 0;\n\tm_layers = 0;\n\tm_number = 0;\n\tdepthBuffer = NULL;\n\tinitialized = false;\n\tlayer_bound = 0;\n\toldFB = 0;\n\tscene = Scene::getInstance();\n\tHUD = new DisplayResource(\"HUD FBO\");\n\tHUDArray = new DisplayLayer(\"HUD ARRAY FBO\");\n\tglState = EngineGLState::getInstance();\n\t\n\n}\n\n\nGPUFBO::~GPUFBO()\n{\n\tdelete HUD;\n\n\tdestroy();\n}\n\n\nint GPUFBO::getWidth()\n{\n\treturn m_width;\n}\nint GPUFBO::getHeight()\n{\n\treturn m_height;\n}\nbool GPUFBO::isInitialized()\n{\n\treturn initialized;\n}\n\nvoid GPUFBO::destroy()\n{\n\tfor (unsigned int i =0;i < colorBuffers.size();i++)\n\t\tdelete colorBuffers[i];\n\tcolorBuffers.clear();\n\tif (m_use_depth)\n\t\tdelete depthBuffer;\n\tglDeleteFramebuffers(1,&m_FBOId);\n\n}\n\nbool GPUFBO::create(int w,int h,int numberOfTarget,bool useDepth,GLint format,GLint typeOfTarget,int layerDepth)\n{\n\n\tm_width = w;\n\tm_height = h;\n\tm_use_depth = useDepth;\n\tm_number = numberOfTarget;\n\tm_Target = typeOfTarget;\n\tm_layers = layerDepth;\n\tm_format = format;\n\n\tglGenFramebuffers(1,&m_FBOId);\n\n\tbufferIsBound = new bool[numberOfTarget];\n\tglBindFramebuffer(GL_FRAMEBUFFER,m_FBOId);\n\tfor(int i=0;i<numberOfTarget;i++)\n\t{\t\t\n\t\tswitch (typeOfTarget)\n\t\t{\n\t\tcase GL_TEXTURE_3D :\n\t\tcase GL_TEXTURE_2D_ARRAY :\n\t\t\tcolorBuffers.push_back(new GPUTexture2DArray(m_Name+\"ColoRArray\"+toStr(i),m_width,m_height,layerDepth,format));\n\t\t\tglFramebufferTextureLayer(GL_FRAMEBUFFER, buffers[i], colorBuffers[i]->getId(),0, 0);\n\t\t\tfor (int k = 0; k < layerDepth; k++)\n\t\t\t\tglFramebufferTextureLayer(GL_FRAMEBUFFER, buffers[k], colorBuffers[0]->getId(), 0, k);\n\t\t\t\n\t\t\tbreak;\n\n\t\tcase GL_TEXTURE_2D :\n\t\t\tcolorBuffers.push_back(new GPUTexture2D(m_Name+\"Color\"+toStr(i),m_width,m_height,format));\n\n\t\t\tglFramebufferTexture2D(GL_FRAMEBUFFER,buffers[i],typeOfTarget,colorBuffers[i]->getId(),0);\n\t\t\tglFramebufferTextureLayer(GL_FRAMEBUFFER, buffers[i], colorBuffers[i]->getId(), 0, i);\n\t\t\tbreak;\n\n\t\tdefault:\n\t\t\tLOG_WARNING  << this->getName() + \" Error : unrecognized type of target \" << endl;\n\t\t\treturn false;\n\t\t\tbreak;\n\t\t}\n\n\t\tbufferIsBound[i] = false;\n\n\t}\n\n\t\n\tif (m_use_depth)\n\t{\n\t\tswitch (typeOfTarget)\n\t\t{\n\t\tcase GL_TEXTURE_3D:\n\t\tcase GL_TEXTURE_2D_ARRAY:\n\t\t\tdepthBuffer = new GPUTexture2DArray(m_Name + \"-Depth\", m_width, m_height, layerDepth, GL_DEPTH_COMPONENT24, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT);\n\t\t\tglFramebufferTextureLayer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, depthBuffer->getId(), 0, 0);\n\t\t\tbreak;\n\n\t\tcase GL_TEXTURE_2D:\n\t\t\tdepthBuffer = new GPUTexture2D(m_Name + \"-Depth\", m_width, m_height, GL_DEPTH_COMPONENT24, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT);\n\t\t\tglFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, typeOfTarget, depthBuffer->getId(), 0);\n\t\t\tbreak;\n\n\t\tdefault:\n\t\t\tLOG_ERROR << this->getName() + \" Error : unrecognized type of target \" << endl;\n\t\t\treturn false;\n\t\t\tbreak;\n\t\t}\n\t}\n\tglBindFramebuffer(GL_FRAMEBUFFER, 0);    //  unbind\n\n\tinitialized = CheckFramebufferStatus();\n\treturn(initialized);\n\n}\nbool  GPUFBO::CheckFramebufferStatus()\n{\n\tGLenum status;\n\tstatus = (GLenum) glCheckFramebufferStatus(GL_FRAMEBUFFER);\n\tbool evryok = false;\n\tswitch(status) {\n\tcase GL_FRAMEBUFFER_COMPLETE:\n\t\tevryok = true;\n\t\tbreak;\n\tcase GL_FRAMEBUFFER_UNSUPPORTED:\n\t\tinfo_text += \"Unsupported framebuffer format\\n\";\n\t\tbreak;\n\tcase GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:\n\t\tinfo_text += \"Framebuffer incomplete, missing attachment\\n\";\n\t\tbreak;\n\tcase GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT:\n\t\tinfo_text += \"Framebuffer incomplete, attached images must have same dimensions\\n\";\n\t\tbreak;\n\tcase GL_FRAMEBUFFER_INCOMPLETE_FORMATS_EXT:\n\t\tinfo_text += \"Framebuffer incomplete, attached images must have same format\\n\";\n\t\tbreak;\n\tcase GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER_EXT:\n\t\tinfo_text += \"Framebuffer incomplete, missing draw buffer\\n\";\n\t\tbreak;\n\tcase GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER_EXT:\n\t\tinfo_text += \"Framebuffer incomplete, missing read buffer\\n\";\n\t\tbreak;\n\tdefault:\n\t\tinfo_text += \"Unknown Framebuffer Error\";\n\t}\n\treturn(evryok);\n}\n\nvoid GPUFBO::drawBuffer(int i)\n{\n\t\tglDrawBuffer(buffers[i]);\n}\nvoid  GPUFBO::drawBuffers(int i)\n{\n\tglDrawBuffers(i,buffers);\n}\n\nvoid GPUFBO::enable()\n{\n\tglGetIntegerv(GL_FRAMEBUFFER_BINDING,&oldFB);\n\t//glPushAttrib(GL_ALL_ATTRIB_BITS);\n\t//glViewport(0, 0, width, height);\n\n\tglState->pushViewport();\n\tglState->setViewport(glm::ivec4(0, 0, m_width, m_height));\n\n\tglBindFramebuffer(GL_FRAMEBUFFER, m_FBOId);\n}\n\nvoid GPUFBO::enable(int layer,int attachment)\n{\n\n\tglGetIntegerv(GL_FRAMEBUFFER_BINDING,&oldFB);\n\t//glPushAttrib(GL_ALL_ATTRIB_BITS);\n\t//glViewport(0, 0,  width,  height);\n\tglState->pushViewport();\n\tglState->setViewport(glm::ivec4(0, 0, m_width, m_height));\n\n\tglBindFramebuffer (GL_FRAMEBUFFER, m_FBOId);\n\tglFramebufferTextureLayer(GL_FRAMEBUFFER, buffers[attachment], colorBuffers[0]->getId(), 0, layer);\n\t/*switch (m_Target)\n\t{\n\t\tcase GL_TEXTURE_2D_ARRAY:\n\t\t\tglFramebufferTextureLayer(GL_FRAMEBUFFER, buffers[attachment], colorBuffers[0]->getId(), 0, layer);\n\t\t\tbreak;\n\n\t\tcase GL_TEXTURE_2D:\n\t\tdefault:\n\t\t\tglFramebufferTexture2D(GL_FRAMEBUFFER, buffers[attachment], m_Target, colorBuffers[layer]->getId(), 0);\n\t}*/\n\t\n\tif (m_use_depth) \n\t\t//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, m_Target, depthBuffer->getId(), 0);\n\t\tglFramebufferTextureLayer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, depthBuffer->getId(), 0, layer);\n}\n\nvoid GPUFBO::bindLayerToBuffer(int layer, int buffer){\n\tswitch (m_Target)\n\t{\n\t\tcase GL_TEXTURE_2D_ARRAY:\n\t\t\tglFramebufferTextureLayer(GL_FRAMEBUFFER, buffers[buffer], colorBuffers[0]->getId(), 0, layer);\n\t\t\tbreak;\n\n\t\tcase GL_TEXTURE_2D:\n\t\tdefault:\n\t\t\tglFramebufferTexture2D(GL_FRAMEBUFFER, buffers[buffer], m_Target, colorBuffers[layer]->getId(), 0);\n\t}\n\t\n}\n\n\nvoid GPUFBO::disable()\n{\n\t// rebind old framebuffer\n\tglBindFramebuffer (GL_FRAMEBUFFER, oldFB);\n\t// restore attributes\n\tglState->popViewport();\n}\nvoid GPUFBO::display(const glm::vec4 &box,int layer)\n{\n\tif(m_Target == GL_TEXTURE_2D)\n\t{\n\t\tcolorBuffers[layer]->bind();\n\t\t//HUD->isUIntDepth->Set(0);\n\t\tHUD->display(box);\n\t\tcolorBuffers[layer]->release();\n\t}\n\telse\n\t{\n\t\tcolorBuffers[0]->bind();\n\t\tHUDArray->display(box,layer);\n\t\tcolorBuffers[0]->release();\n\t}\n\n}\n\n\nvoid GPUFBO::displayDepth(const glm::vec4  &box)\n{\n\tdepthBuffer->bind();\n\t//HUD->isUIntDepth->Set(1);\n\tHUD->display(box);\n\tdepthBuffer->release();\n\n}\nGPUTexture* GPUFBO::getColorTexture(int i)\n{\n\treturn colorBuffers[i];\n}\n\nGPUTexture* GPUFBO::getDepthTexture()\n{\n\treturn depthBuffer;\n}\n\nvoid GPUFBO::bindColorTexture(int channel,int layer )\n{\n\tif (layer < (int)colorBuffers.size())\n\t{\n\t\tcolorBuffers[layer]->bind(channel);\n\t\tlayer_bound = layer;\n\t\tbufferIsBound[layer] = true;\n\t}\n}\n\nvoid GPUFBO::releaseColorTexture()\n{\n//\tcolorBuffers[layer_bound]->release();\n\tfor(int i = 0 ; i < (int) colorBuffers.size() ; i++)\n\t{\n\t\tif (bufferIsBound[i]) colorBuffers[i]->release();\n\t}\n\n}\n\nvoid GPUFBO::bindDepthTexture(int channel )\n{\n\tdepthBuffer->bind(channel);\n\n}\nvoid GPUFBO::releaseDepthTexture()\n{\n\tdepthBuffer->release();\n\n}\nvoid GPUFBO::setDepthBuffer(GPUTexture* de)\n{\n\tdepthBuffer = de;\n\tglBindFramebuffer(GL_FRAMEBUFFER,m_FBOId);\n\tglFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthBuffer->getId(), 0);\n\tglBindFramebuffer(GL_FRAMEBUFFER,0);\n}\n\n\nvoid GPUFBO::switchToTexture2DArray()\n{\n\t// TODO : à partir du tableau de texture, remplacer\n\t\n}\n\nGLuint GPUFBO::getFBOid()\n{\n\treturn m_FBOId;\n}\n\n\nvoid GPUFBO::changeResolution(glm::ivec2 newRes)\n{\n\tdestroy();\n\tcreate(newRes.x, newRes.y, 1, m_use_depth, m_format, m_Target, m_layers);\n}\nvoid GPUFBO::writeToFile(string filename)\n{\n\tLOG_INFO << \" Writing file\" << filename <<std::endl;\n\tint height = this->getHeight();\n\tint width = this->getWidth();\n\tint tt = height * width * 4;\n\tunsigned char* toto = new unsigned char[tt];\n\tthis->enable();\n\tglReadBuffer(GL_COLOR_ATTACHMENT0);\n\tglReadPixels(0, 0, height, width, GL_RGBA, GL_UNSIGNED_BYTE, toto);\n\tthis->disable();\n\tsave_image_as_DDS(filename.c_str(), width, height, 4, toto);\n\n\t\n\tFILE* ff = fopen(filename.c_str(), \"ab\");\n\tfwrite(toto, sizeof(unsigned char)*tt, 1, ff);\n\n\tLOG_INFO  << \" File exported\" << std::endl;\n\n\n}\nvoid GPUFBO::displayInterface(const char* title)\n{\n\tif (!ImGui::Begin(title, &show_interface))\n\t{\n\t\tImGui::End();\n\t\treturn;\n\t}\n\tint resolution = 0;\n\n\tif (ImGui::Button(\"Resolution\"))\n\t\tImGui::OpenPopup(\"selectResolution\");\n\tImGui::SameLine();\n\tstd::string currentResolution = (std::to_string(m_width) + std::string(\" X \") + std::to_string(m_height));\n\t//ImGui::Text(currentResolution.c_str());\n\tglm::ivec2 newResolution =glm::ivec2(0.0);\n\tif (ImGui::BeginPopup(\"selectResolution\"))\n\t{\n\t\tImGui::Text(\"%s\",currentResolution.c_str());\n\t\tImGui::Separator();\n\t\tif (ImGui::Selectable(\"512 X 512\"))\n\t\t\tnewResolution = glm::ivec2(512);\n\t\tif (ImGui::Selectable(\"1024 X 1024\"))\n\t\t\tnewResolution = glm::ivec2(1024);\n\t\tif (ImGui::Selectable(\"2048 X 2048\"))\n\t\t\tnewResolution = glm::ivec2(2048, 2048);\n\t\tif (ImGui::Selectable(\"4096 X 4096\"))\n\t\t\tnewResolution = glm::ivec2(4096, 4096);\n\t\tif (ImGui::Selectable(\"8192 X 8192\"))\n\t\t\tnewResolution = glm::ivec2(8192, 8192);\n\t\tImGui::EndPopup();\n\t}\n\tstatic char buf[128] = \"Screenshot.dds\";\n\tbool to_save = false;\n\t\n\tto_save = ImGui::Button(\"Save\");\n\tImGui::SameLine();\n\tImGui::Text(\"%s\",buf);\n\tif (ImGui::BeginPopupContextItem(\"Select Filename\"))\n\t{\n\t\tImGui::InputText(\"\", buf, 128);\n\t\tif (ImGui::Button(\"Close\"))\n\t\t\tImGui::CloseCurrentPopup();\n\t\tImGui::EndPopup();\n\t}\n\t\n\tif (to_save)\n\t\twriteToFile(std::string(buf));\n\t\n\tif (newResolution.x != 0)\n\t\tchangeResolution(newResolution);\n\tfor (int i = 0; i < m_number; i++)\n\t{\n\t\tImGui::Image((GLuint*)getColorTexture(i)->getId(), ImVec2(128, 128), ImVec2(0.0, 1.0), ImVec2(1.0, 0.0));\n\t\tif (ImGui::IsItemHovered())\n\t\t{\n\t\t\tImGui::BeginTooltip();\n\t\t\tImGui::Image((GLuint*)getColorTexture(i)->getId(), ImVec2(512, 512), ImVec2(0.0, 1.0), ImVec2(1.0, 0.0));\n\t\t\tImGui::EndTooltip();\n\t\t}\n\t\tImGui::SameLine();\n\n\t}\n\n\t\n\tImGui::End();\n}",
+			"file": "/media/giletp01/Dev/Dev/TestGStudent/Core/GPUResources/FBO/GPUFBO.cpp",
+			"file_size": 10586,
+			"file_write_time": 131497761797321492,
+			"settings":
+			{
+				"buffer_size": 10586,
+				"encoding": "Western (Windows 1252)",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Makefile",
+			"settings":
+			{
+				"buffer_size": 8441,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/media/giletp01/Dev/Dev/TestGStudent/run.sh",
+			"settings":
+			{
+				"buffer_size": 93,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "/*\nEngineGL overloaded for custom rendering\n*/\n#include \"SampleEngine.h\"\n#include \"Engine/OpenGL/v4/GLProgram.h\"\n#include \"Engine/OpenGL/SceneLoaderGL.h\"\n#include \"Engine/Base/NodeCollectors/MeshNodeCollector.h\"\n#include \"Engine/Base/NodeCollectors/FCCollector.h\"\n\n#include \"Materials/BaseMaterial/BaseMaterial.h\"\n\n#include \"GPUResources/GPUInfo.h\"\n\n\nSampleEngine::SampleEngine(int width, int height) :\nEngineGL (width, height)\n{\n\tLOG_INFO << \"# - \" << __FUNCTION__ << std::endl;\n\t\n\t\n}\n\nSampleEngine::~SampleEngine()\n{}\n\n\nbool SampleEngine::init(std::string filename)\n{\n\t//Création d'un materiau de Base\n\tBaseMaterial* material = new BaseMaterial(\"Base Material\");\n\n\t//Création d'un objet, méthode condensée\n\t//addObject(\"Bunny\",ressourceObjPath + \"Bunny.obj\",material);\n\n\t//Création d'un objet, méthode détaillée\n\tNode* bunny = scene->getNode(\"bunny\");\n\tbunny->setModel(scene->m_Models.get<ModelGL>(ressourceCoreObjPath + \"Bunny.obj\"));\n\tbunny->frame()->scale(glm::vec3(30.0));\n\tbunny->setMaterial(material);\n\tscene->getSceneNode()->adopt(bunny);\n\n\t\n\tsetUpEngine();\n\tLOG_INFO << \"initialisation complete\" << std::endl;\n\treturn(true);\n}\n\n\nvoid SampleEngine::render ()\n{\n\n\t\n\tglClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);\n\tfor (unsigned int i = 0; i < renderedNodes->nodes.size(); i++)\n\t\trenderedNodes->nodes[i]->render();\n\t\n\tdrawBBAndLight();\n}\n\nvoid SampleEngine::animate (const int elapsedTime)\n{\n\t// Animate each node\n\tfor (unsigned int i = 0; i < allNodes->nodes.size (); i++)\n\t\tallNodes->nodes[i]->animate (elapsedTime);\n\t// force update of lighting model\n\tlightingModel->update (true);\n\tScene::getInstance()->camera()->updateBuffer();\n}\n\n",
+			"file": "/media/giletp01/Dev/Dev/TestGStudent/MyProject/Sources/SampleEngine.cpp",
+			"file_size": 1660,
+			"file_write_time": 131497764392051690,
+			"settings":
+			{
+				"buffer_size": 1649,
+				"encoding": "UTF-8 with BOM",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "#ifndef _CONSTANTS_H\n#define _CONSTANTS_H\n#include <string>\n\nconst std::string rootPath = \"./MyProject/\";\nconst std::string corePath = \"./Core/\";\n\n\n#define USE_ASSIMP\nconst std::string ressourceMaterialPath = rootPath+\"Materials/\";\nconst std::string ressourceCoreMaterialPath = corePath +\"Materials/\";\n\nconst std::string ressourceEffectPath = rootPath+\"Effects/\";\nconst std::string ressourceCoreEffectPath =  corePath +\"Effects/\";\n\nconst std::string ressourceObjPath = rootPath+\"Objets/\";\nconst std::string ressourceCoreObjPath = corePath + \"Objets/\";\n\nconst std::string ressourceGPUPath = rootPath+\"Resources/\";\nconst std::string ressourceTexPath = rootPath+\"Textures/\";\n\n#define LIGHTING_SSBO_BINDING 20\n#define COMMON_SSBO_BINDING 21\n\n\n\n\n#define HD 1\n\n#if HD\n#define FBO_WIDTH 1920\n#define FBO_HEIGHT 1080\n#else \n#define FBO_WIDTH 1280\n#define FBO_HEIGHT 720\n#endif\n\n\n#endif\n",
+			"file": "/media/giletp01/Dev/Dev/TestGStudent/Core/Utils/Constants.h",
+			"file_size": 878,
+			"file_write_time": 131496835210000000,
+			"settings":
+			{
+				"buffer_size": 878,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "#include \"BRDFMaterial.hpp\"\n\nusing namespace std;\n\nBRDFMaterial::BRDFMaterial(string name, string className) : MaterialGL(name, className) {\n\n\tmodelViewProj = vp->uniforms()->getGPUmat4(\"MVP\");\n\tmodelView = vp->uniforms()->getGPUmat4(\"MV\");\n\n\tmodelViewF = vp->uniforms()->getGPUmat4(\"NormalMV\");\n\n}\n\nBRDFMaterial::~BRDFMaterial() {\n\n}\n\nvoid BRDFMaterial::setUniformFloat(GLenum typeShader, string uniformName, float value) {\n\tgetProgramByType(typeShader)->uniforms()->getGPUfloat(uniformName)->Set(value);\n\taddUniformFloatInList(uniformName, typeShader, value);\n}\n\nfloat BRDFMaterial::getUniformFloat(GLenum typeShader, string uniformName) { return getProgramByType(typeShader)->uniforms()->getGPUfloat(uniformName)->getValue(); }\n\nvoid BRDFMaterial::setUniformBool(GLenum typeShader, string uniformName, bool value) {\n\tgetProgramByType(typeShader)->uniforms()->getGPUbool(uniformName)->Set(value);\n\taddUniformBoolInList(uniformName, typeShader, value);\n}\n\nbool BRDFMaterial::getUniformBool(GLenum typeShader, string uniformName) { return getProgramByType(typeShader)->uniforms()->getGPUbool(uniformName)->getValue(); }\n\n\nvoid BRDFMaterial::setUniformVec4(GLenum typeShader, string uniformName, glm::vec4 &value) {\n\tgetProgramByType(typeShader)->uniforms()->getGPUvec4(uniformName)->Set(value);\n\taddUniformVec4InList(uniformName, typeShader, value);\n}\n\nglm::vec4 BRDFMaterial::getUniformVec4(GLenum typeShader, string uniformName) { return getProgramByType(typeShader)->uniforms()->getGPUvec4(uniformName)->getValue(); }\n\nvoid BRDFMaterial::setUniformVec3(GLenum typeShader, string uniformName, glm::vec3 &value) {\n\tgetProgramByType(typeShader)->uniforms()->getGPUvec3(uniformName)->Set(value);\n\taddUniformVec3InList(uniformName, typeShader, value);\n}\n\nglm::vec3 BRDFMaterial::getUniformVec3(GLenum typeShader, string uniformName) { return getProgramByType(typeShader)->uniforms()->getGPUvec3(uniformName)->getValue(); }\n\nGLProgram* BRDFMaterial::getProgramByType(GLenum shaderType) {\n\tswitch (shaderType) {\n\tcase GL_VERTEX_SHADER:\n\t\treturn vp;\n\tcase GL_FRAGMENT_SHADER:\n\t\treturn fp;\n\tdefault:\n\t\tthrow \"Erreur : type de shader inexistant ou incorrect\";\n\t}\n}\n\nvoid BRDFMaterial::render(Node *o)\n{\n\n\tif (m_ProgramPipeline)\n\t{\n\t\tm_ProgramPipeline->bind();\n\n\t\tmodelViewProj->Set(o->frame()->getTransformMatrix());\n\t\tmodelView->Set(o->frame()->getRootMatrix());\n\t\tmodelViewF->Set(glm::transpose(glm::inverse(o->frame()->getRootMatrix())));\n\n\t\to->drawGeometry(GL_TRIANGLES);\n\t\tm_ProgramPipeline->release();\n\t}\n}\n\nvoid BRDFMaterial::update(Node* o, const int elapsedTime)\n{\n\n\tif (o->frame()->updateNeeded())\n\t{\n\t\t\n\t}\n\n}\n\nvoid BRDFMaterial::displayInterface(const char *title) {\n\n\tImGui::Text(\"%s\",title);\n\tImGui::Separator();\n\n\t//On parcourt chacune de nos listes d'uniformes afin d'ajouter les valeurs a l'affichage\n\tfor (auto it = listUniformFloat.begin(); it != listUniformFloat.end(); ++it) {\n\n\t\t//On recupere le nom de l'uniforme\n\t\tpair<string, GLenum> uniform = it->first;\n\t\tstring uniformName = uniform.first;\n\n\t\t//On recupere la valeur dans la liste\n\t\tfloat value = it->second;\n\n\t\tchar* name = new char[uniformName.length() + 1];\n\t\tstrcpy(name, uniformName.c_str());\n\t\t\n\t\t//Mise en place du champ\n\t\tImGui::InputFloat(name, &value);\n\t\t//Si la valeur a ete modifiee on met a jour la valeur dans l'uniform\n\t\tif (it->second != value) {\n\t\t\tit->second = value;\n\t\t\tsetUniformFloat(uniform.second, name, value);\n\t\t}\n\n\t\t\n\t}\n\n\tfor (auto it = listUniformVec3.begin(); it != listUniformVec3.end(); ++it) {\n\n\t\tpair<string, GLenum> uniform = it->first;\n\t\tstring uniformName = uniform.first;\n\n\t\t//On cree un tableau de float de taille 3 pour representer le vec3\n\t\tfloat *value = new float[3];\n\t\tglm::vec3 v = it->second;\n\t\tvalue[0] = v.x;\n\t\tvalue[1] = v.y;\n\t\tvalue[2] = v.z;\n\n\t\tchar* name = new char[uniformName.length() + 1];\n\t\tstrcpy(name, uniformName.c_str());\n\n\t\tImGui::InputFloat3(name, value);\n\n\t\tif (it->second.x != value[0] || it->second.y != value[1] || it->second.z != value[2]) {\n\t\t\tit->second.x = value[0];\n\t\t\tit->second.y = value[1];\n\t\t\tit->second.z = value[2];\n\t\t\tsetUniformVec3(uniform.second, name, it->second);\n\t\t}\n\n\t}\n\n\tfor (auto it = listUniformVec4.begin(); it != listUniformVec4.end(); ++it) {\n\n\t\tpair<string, GLenum> uniform = it->first;\n\t\tstring uniformName = uniform.first;\n\n\t\t//On cree un tableau de float de taille 4 pour representer le vec4\n\t\tfloat *value = new float[4];\n\t\tglm::vec4 v = it->second;\n\t\tvalue[0] = v.x;\n\t\tvalue[1] = v.y;\n\t\tvalue[2] = v.z;\n\t\tvalue[3] = v.w;\n\n\t\tchar* name = new char[uniformName.length() + 1];\n\t\tstrcpy(name, uniformName.c_str());\n\n\t\tImGui::InputFloat4(name, value);\n\n\t\tif (it->second.x != value[0] || it->second.y != value[1] || it->second.z != value[2] || it->second.z != value[3]) {\n\t\t\tit->second.x = value[0];\n\t\t\tit->second.y = value[1];\n\t\t\tit->second.z = value[2];\n\t\t\tit->second.w = value[3];\n\t\t\tsetUniformVec4(uniform.second, name, it->second);\n\t\t}\n\n\t}\n\n\tfor (auto it = listUniformBool.begin(); it != listUniformBool.end(); ++it) {\n\n\t\tpair<string, GLenum> uniform = it->first;\n\t\tstring uniformName = uniform.first;\n\n\t\t//On cree la variable booleen\n\t\tbool value = it->second;\n\n\t\tchar* name = new char[uniformName.length() + 1];\n\t\tstrcpy(name, uniformName.c_str());\n\n\t\tImGui::Checkbox(name, &value);\n\t\tif (it->second != value) {\n\t\t\tit->second = value;\n\t\t\tsetUniformBool(uniform.second, name, it->second);\n\t\t}\n\n\t}\n\n}\n\n//Ajout d'un uniforme de type float dans la liste\nvoid BRDFMaterial::addUniformFloatInList(string uniformName, GLenum typeShader, float value) {\n\n\tif (!isUniformExist(\"float\", uniformName, typeShader)) {\n\n\t\tpair<string, GLenum> p = pair<string, GLenum>(uniformName, typeShader);\n\t\tlistUniformFloat.insert(pair<pair<string, GLenum>, float>(p, value));\n\t}\n}\n\n//Ajout d'un uniforme de type vec3 dans la liste\nvoid BRDFMaterial::addUniformVec3InList(string uniformName, GLenum typeShader, glm::vec3 &value) {\n\n\tif (!isUniformExist(\"vec3\", uniformName, typeShader)) {\n\n\t\tpair<string, GLenum> p = pair<string, GLenum>(uniformName, typeShader);\n\t\tlistUniformVec3.insert(pair<pair<string, GLenum>, glm::vec3>(p, value));\n\t}\n}\n\n//Ajout d'un uniforme de type vec4 dans la liste\nvoid BRDFMaterial::addUniformVec4InList(string uniformName, GLenum typeShader, glm::vec4 &value) {\n\n\tif (!isUniformExist(\"vec4\", uniformName, typeShader)) {\n\n\t\tpair<string, GLenum> p = pair<string, GLenum>(uniformName, typeShader);\n\t\tlistUniformVec4.insert(pair<pair<string, GLenum>, glm::vec4>(p, value));\n\t}\n}\n\nvoid BRDFMaterial::addUniformBoolInList(string uniformName, GLenum typeShader, bool value) {\n\n\tif (!isUniformExist(\"bool\", uniformName, typeShader)) {\n\n\t\tpair<string, GLenum> p = pair<string, GLenum>(uniformName, typeShader);\n\t\tlistUniformBool.insert(pair<pair<string, GLenum>, bool>(p, value));\n\n\t}\n}\n\n/*\n\tMéthode permettant de savoir si l'uniform passé en paramètre est déjà présent dans la liste\n*/\nbool BRDFMaterial::isUniformExist(string type, string uniformName, GLenum typeShader) {\n\n\tif (type == \"float\") {\n\n\t\tfor (auto it = listUniformFloat.begin(); it != listUniformFloat.end(); ++it) {\n\t\t\tif (it->first.first == uniformName && it->first.second == typeShader)\n\t\t\t\treturn true;\n\t\t}\n\t\treturn false;\n\n\t}\n\telse if (type == \"vec3\") {\n\n\t\tfor (auto it = listUniformVec3.begin(); it != listUniformVec3.end(); ++it) {\n\t\t\tif (it->first.first == uniformName && it->first.second == typeShader)\n\t\t\t\treturn true;\n\t\t}\n\t\treturn false;\n\n\t}\n\telse if (type == \"vec4\") {\n\n\t\tfor (auto it = listUniformVec4.begin(); it != listUniformVec4.end(); ++it) {\n\t\t\tif (it->first.first == uniformName && it->first.second == typeShader)\n\t\t\t\treturn true;\n\t\t}\n\t\treturn false;\n\n\t}\n\telse if (type == \"bool\") {\n\n\t\tfor (auto it = listUniformBool.begin(); it != listUniformBool.end(); ++it){\n\t\t\tif (it->first.first == uniformName && it->first.second == typeShader)\n\t\t\t\treturn true;\n\t\t}\n\t\treturn false;\n\t}\n\t\n\t//si le type est inconnu on renvoie true pour éviter de l'ajouter dans la liste\n\treturn true;\n\n}",
+			"file": "/media/giletp01/Dev/Dev/TestGStudent/Core/Materials/BRDFMaterial/BRDFMaterial.cpp",
+			"file_size": 7919,
+			"file_write_time": 131497759800494071,
+			"settings":
+			{
+				"buffer_size": 7919,
+				"encoding": "Western (Windows 1252)",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "#include \"ColorMaterial.h\"\n#include \"Engine/Base/Node.h\"\n#include \"Engine/Base/Scene.h\"\n\n\nColorMaterial::ColorMaterial(std::string name, const glm::vec4 & c):\n\tMaterialGL(name,\"ColorMaterial\")\n{\n\t\n\tmodelM = vp->uniforms()->getGPUmat4(\"Model\");\n\tmodelViewProj = vp->uniforms()->getGPUmat4(\"MVP\");\n\tcolor = fp->uniforms()->getGPUvec4(\"CPU_color\");\n\tcolor->Set(c);\n}\nColorMaterial::~ColorMaterial()\n{\n\n}\n\nvoid ColorMaterial::setColor(glm::vec4 c)\n{\n\tcolor->Set(c);\n}\n\nvoid ColorMaterial::render(Node *o)\n{\n\t\n\tif (m_ProgramPipeline)\n\t{\t\t\n\t\tm_ProgramPipeline->bind();\n\t\to->drawGeometry(GL_TRIANGLES);\n\t\tm_ProgramPipeline->release();\n\t}\n}\n\nvoid ColorMaterial::update(Node* o,const int elapsedTime)\n{\n\t\n\tif (o->frame()->updateNeeded())\n\t{\n\t\tmodelM->Set(o->frame()->getRootMatrix());\n\t} \n\t\n\t\n}\n\nvoid ColorMaterial::displayInterface(const char* title)\n{\n\tImGui::Text(\"%s\",title);\n\tImGui::Separator();\n\tImGui::Text(\"Color :\");\n\tImGui::SameLine();\n\tglm::vec4 c = color->getValue();\n\n\tImVec4 color = ImColor(c.x, c.y, c.z, c.w);\n\tif (ImGui::ColorButton(color))\n\t\tImGui::OpenPopup(\"MaterialColor\");\n\tif (ImGui::BeginPopup(\"MaterialColor\"))\n\t{\n\t\tImGui::ColorPicker4(\"\", (float*)&color);\n\t\tImGui::EndPopup();\n\t\tsetColor(glm::vec4(color.x, color.y, color.z, color.w));\n\t}\n\t\n}",
+			"file": "/media/giletp01/Dev/Dev/TestGStudent/Core/Materials/ColorMaterial/ColorMaterial.cpp",
+			"file_size": 1259,
+			"file_write_time": 131497760440648274,
+			"settings":
+			{
+				"buffer_size": 1259,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "#ifndef _COLORMATERIAL_H\n#define _COLORMATERIAL_H\n\n\n#include \"Engine/OpenGL/MaterialGL.h\"\n#include \"Engine/OpenGL/Lighting/LightingModelGL.h\"\n#include <memory.h>\n\nclass ColorMaterial : public MaterialGL\n{\n\tpublic:\n\t\tColorMaterial(std::string name, const glm::vec4 & c = glm::vec4(0.5,0.5,0.5,1.0));\n\t\t~ColorMaterial();\n\t\tvoid setColor(glm::vec4 c);\n\n\t\tvirtual void render(Node *o);\n\t\tvirtual void update(Node* o,const int elapsedTime);\n\t\tGPUmat4* modelViewProj;\n\t\tGPUvec4* color;\n\t\tGPUmat4* modelM;\n\t\tGPUmat4* projM;\n\n\t\tvirtual void displayInterface(const char* title);\n\n};\n\n#endif",
+			"file": "/media/giletp01/Dev/Dev/TestGStudent/Core/Materials/ColorMaterial/ColorMaterial.h",
+			"file_size": 581,
+			"file_write_time": 131497761052565528,
+			"settings":
+			{
+				"buffer_size": 581,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "#include \"LightNode.hpp\"\n#include <sstream>\n#include \"GPUResources/FBO/GPUFBO.h\"\n#include \"Engine/Base/Scene.h\"\n\nvoid printLight(Light* L)\n{\n}\n\n\nLightNode::LightNode(std::string name,const glm::vec4 & color):\n\tNode(name)\n{\n\tsetColor(color);\n\tparams.info.x = POINT_LIGHT;// par defaut on met un point light\n\tshadowMapSize = 512;//default shadow map res\n\tneedUpdate = true;\n\tLOG_TRACE << \"creating lightNode : \" << name << std::endl;\n}\n\nLight LightNode::getParams()\n{\n\treturn params;\n}\nvoid LightNode::setParams(const Light & p)\n{\n\tparams = p;\n}\n\t\nglm::vec3 LightNode::getPosition()\n{\n\treturn m_Frame->convertPtTo(glm::vec3(0.0,0.0,0.0),Scene::getInstance()->getRoot()->frame());\n\t//return glm::vec3(params.position.x,params.position.y,params.position.z);\n}\nvoid LightNode::setPosition(const glm::vec4  p)\n{\n\tparams.position = p;\n}\nglm::vec4 LightNode::getColor()\n{\n\treturn params.color;\n}\nvoid LightNode::setColor(const glm::vec4  c)\n{\n\tparams.color = c;\n}\n\nfloat LightNode::getType()\n{\n\treturn params.info.x;\n}\n\nvoid LightNode::setType(unsigned int kind)\n{\n\tparams.info.x = (float)kind;\n}\n\nfloat LightNode::getAngle()\n{\n\treturn params.info.z;\n}\n\nvoid LightNode::setAngle(float a)\n{\n\tparams.info.z = a;\n}\n\n\nglm::vec4 LightNode::getDirection()\n{\n\treturn params.direction;\n}\n\nvoid LightNode::setDirection(const glm::vec4 & dir)\n{\n\tparams.direction = dir;\n}\n\n\nvoid LightNode::displayInterface()\n{\n\tImGui::BeginChild(getName().c_str(), ImVec2(100,100), true);\n\tImGui::Text(\"%s\",getName().c_str());\n\tif (ImGui::Checkbox(\"Manipulate Node\", &isManipulated))\n\t{\n\t\tif (isManipulated)\n\t\t\tScene::getInstance()->manipulateNode(m_Name.c_str());\n\t\telse\n\t\t\tScene::getInstance()->manipulateNode(\"Scene\");\n\t}\n\tImGui::Text(\"Color :\");\n\tImGui::SameLine();\n\tglm::vec4 c = params.color;\n\tImVec4 color = ImColor(c.x, c.y, c.z, c.w);\n\tif (ImGui::ColorButton(color))\n\t\tImGui::OpenPopup(\"LightColor\");\n\tif (ImGui::BeginPopup(\"LightColor\"))\n\t{\n\t\tImGui::ColorPicker4(\"\", (float*)&color);\n\t\tImGui::EndPopup();\n\t\tparams.color = glm::vec4(color.x, color.y, color.z, color.w);\n\t}\n\tImGui::EndChild();\n\n\t\n\n\n}\n\n/*\nvoid LightNode::initShadowMap(unsigned int size = 512)\n{\n\tcam = new Camera();\n\tmFBO = new GPUFBO(m_Name);\n\tmFBO->create(size,size);\n\n\n\tif(params.info.x == POINT_LIGHT)\n\t{// on a besoin de 2 camera\n\t\tcam2 = new Camera();\n\t\tparams.info.w = 2;\n\t\tmFBO2 = new GPUFBO(m_Name+\"2\");\n\t\tmFBO2->create(size,size);\n\t\t//camera avec fov 180;\n\t\t\n\t\t//cam->link(Scene::getInstance()->getRoot()->frame());\n\t\t//cam2->link(Scene::getInstance()->getRoot()->frame());\n\n\t\t//cam->getFrame()->setUpFromMatrix(*m_Frame->getMatrix());\n\t\t//cam2->getFrame()->setUpFromMatrix(*m_Frame->getMatrix());\n\t\t//cam->setUpdate(true);\n\t\t//cam2->setUpdate(true);\n\t\tcam->getFrame()->setUpdate(true);\n\t\tcam2->getFrame()->setUpdate(true);\n\t\tcam->setPerspectiveProjection(90,1,0.1,1000 );\n\t\tcam2->setPerspectiveProjection(90,1,0.1,1000 );\n\t\tcam->lookAt(glm::vec3(1.0,0.0,0.0),glm::vec3(params.position.x,params.position.y,params.position.z),glm::vec3(0.0,0.0,1.0));\n\t\tcam2->lookAt(glm::vec3(-1.0,0.0,0.0),glm::vec3(params.position.x,params.position.y,params.position.z),glm::vec3(0.0,0.0,1.0));\n\t\t\n\t}\n\telse if(params.info.x == SPOT_LIGHT)\n\t{\n\t\tparams.info.w = 1;\n\t\tcam->setPerspectiveProjection(params.info.z*0.5,1,1,1000);\n\t\tcam->lookAt(glm::vec3(params.direction.x,params.direction.y,params.direction.z),glm::vec3(params.position.x,params.position.y,params.position.z),glm::vec3(0.0,0.0,1.0));\t\n\t}\n\telse \n\t{\n\t\tparams.info.w = 1;\n\t\t//cam->setOrthographicProjection();//float left,float right,float bottom,float top,float near,float far\t\n\t}\n}*/\n/*\nunsigned int LightNode::getNbrShadowmap()\n{\n\treturn (unsigned int)params.info.w;\n}\n\nvoid LightNode::enableFBO(unsigned int i)\n{\n\tif(i==0) mFBO->enable();\n\tif(i==1) mFBO2->enable();\n}\n\nvoid LightNode::disableFBO(unsigned int i)\n{\n\tif(i==0) mFBO->disable();\n\tif(i==1) mFBO2->disable();\n}\n\nCamera * LightNode::getCam(unsigned int i)\n{\n\tif(i==0) return cam;\n\tif(i==1) return cam2;\n}\n*/\n",
+			"file": "/media/giletp01/Dev/Dev/TestGStudent/Core/Engine/Base/Lighting/LightNode.cpp",
+			"file_size": 3965,
+			"file_write_time": 131497761536393997,
+			"settings":
+			{
+				"buffer_size": 3965,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "#include \"EngineGLState.h\"\n\nEngineGLState::EngineGLState()\n{\n\n}\nvoid EngineGLState::setViewport(glm::ivec4 vp)\n{\n\tm_CurrentViewport = vp;\n\tglViewport(m_CurrentViewport.x, m_CurrentViewport.y, m_CurrentViewport.z, m_CurrentViewport.w);\n}\nvoid EngineGLState::pushViewport()\n{\n\tm_ViewportState.push(m_CurrentViewport);\n}\nvoid EngineGLState::popViewport()\n{\n\tm_CurrentViewport = m_ViewportState.top();\n\tm_ViewportState.pop();\n\tglViewport(m_CurrentViewport.x, m_CurrentViewport.y, m_CurrentViewport.z, m_CurrentViewport.w);\n}\nvoid EngineGLState::reset()\n{\n\twhile (!m_ViewportState.empty())\n\t{\n\t\tm_ViewportState.pop();\n\t}\n}",
+			"file": "/media/giletp01/Dev/Dev/TestGStudent/Core/Engine/OpenGL/EngineGLState.cpp",
+			"file_size": 617,
+			"file_write_time": 131497761621205097,
+			"settings":
+			{
+				"buffer_size": 617,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "#ifndef _GOBLIM_LIGHTNODE_\n#define _GOBLIM_LIGHTNODE_\n\n#include <glm/glm.hpp>\n\n#include <string>\n#include \"Engine/Base/Node.h\"\n#include \"Engine/Base/Camera.h\"\n\n\n#define SPOT_LIGHT 0\n#define POINT_LIGHT 1\n#define DIRECTIONAL_LIGHT 2\n\nclass GPUFBO;\n\nstruct Light\n{\n\tglm::vec4 position;\n\tglm::vec4 color;\n\tglm::vec4 direction;\n\tglm::vec4 info;//.x = type lumiere\n\t// Add matrices here\n\t//glm::mat4 worldToLight;\n\t//glm::mat4 worldToLight2;\n};\n\nvoid printLight(Light* L);\n\n\nclass LightNode : public Node\n{\npublic:\n\t\n\n\tLightNode(std::string name,const glm::vec4 & color = glm::vec4(1.0f));\n\n\tLight getParams();\n\tvoid setParams(const Light & p);\n\t\n\tglm::vec3 getPosition();\n\tvoid setPosition(const glm::vec4  p);\n\t\n\tglm::vec4 getColor();\n\tvoid setColor(const glm::vec4  c);\n\n\tfloat getType();\n\tvoid setType(unsigned int kind);\n\n\tfloat getAngle();\n\tvoid setAngle(float a);\n\n\tglm::vec4 getDirection();\n\tvoid setDirection(const glm::vec4 & dir); \n\n//\tvoid initShadowMap(unsigned int size);// la fonction qui génére les cameras et les FBO aux besoin\n\t\n//\tunsigned int getNbrShadowmap();\n//\tvoid enableFBO(unsigned int i);\n//\tvoid disableFBO(unsigned int i);\n\n//\tCamera * getCam(unsigned int i);\n\tvoid displayInterface();\nprivate:\n\tLight params;\n\tCamera\t* cam,*cam2;\n\tGPUFBO *mFBO,*mFBO2;\n\tint shadowMapSize;\n\tbool needUpdate;\n};\n\t\n\n#endif\n",
+			"file": "/media/giletp01/Dev/Dev/TestGStudent/Core/Engine/Base/Lighting/LightNode.hpp",
+			"file_size": 1331,
+			"file_write_time": 131497760894225523,
+			"settings":
+			{
+				"buffer_size": 1329,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "Custom Make",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 392.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"pac",
+				"Package Control: Install Package"
+			],
+			[
+				"instal",
+				"Package Control: Install Package"
+			],
+			[
+				"set dea",
+				"Set Syntax: Rd (R Documentation)"
+			],
+			[
+				"set",
+				"Set Syntax: GLSL"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"ena",
+				"Package Control: Enable Package"
+			],
+			[
+				"Package Control: ",
+				"Package Control: Enable Package"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"console",
+				"Set Syntax: R Console"
+			],
+			[
+				"Snippet: ",
+				"Snippet: #!/usr/bin/env"
+			]
+		],
+		"width": 449.0
+	},
+	"console":
+	{
+		"height": 125.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = '7183a2d3e96f11eeadd761d777e62404' + 'e330c659d4bb41d3bdf022e94cab3cd0'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://sublime.wbond.net/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by) "
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/media/giletp01/Dev/Dev/TestGStudent/Core",
+		"/media/giletp01/Dev/Dev/TestGStudent"
+	],
+	"file_history":
+	[
+		"/media/giletp01/Dev/Dev/TestGStudent/.goutputstream-6GUF6Y",
+		"/media/giletp01/Dev/Dev/GobLim-student/Core/Engine/Base/GeometricModel.cpp",
+		"/media/giletp01/Dev/Dev/GobLim-student/Core/Engine/Base/Lighting/LightingModel.cpp",
+		"/media/giletp01/Dev/Dev/GobLim-student/MyProject/Sources/SampleEngine.h",
+		"/media/giletp01/Dev/Dev/GobLim-student/Core/Effects/PostProcess/PostProcess.h",
+		"/media/giletp01/Dev/Dev/GobLim-student/Core/Engine/OpenGL/SceneLoaderGL.h",
+		"/media/giletp01/Dev/Dev/GobLim-student/Core/Engine/OpenGL/EngineGL.h",
+		"/media/giletp01/Dev/Dev/GobLim-student/Doxyfile",
+		"/media/giletp01/Dev/Dev/GobLim-student/.gitignore",
+		"/media/giletp01/Dev/Dev/GobLim-student/MyProject/Sources/GoblimApplication.cpp",
+		"/media/giletp01/Dev/Dev/GobLim-student/MyProject/Materials/BaseMaterial/Shaders/Main-FS.glsl",
+		"/media/giletp01/Dev/Dev/GobLim-student/MyProject/Materials/BaseMaterial/Shaders/Main-VS.glsl",
+		"/media/giletp01/Dev/Dev/GobLim-student/MyProject/Materials/BaseMaterial/BaseMaterial.cpp",
+		"/media/giletp01/Dev/Dev/GobLim-student/MyProject/Materials/BaseMaterial/BaseMaterial.h",
+		"/media/giletp01/Dev/Dev/GobLim-student/MyProject/Sources/SampleEngine.cpp",
+		"/media/giletp01/Dev/Models/Sponza/crytek-sponza/sponza.mtl",
+		"/media/giletp01/Dev/Dev/GobLim-student/MyProject/Sources/SampleEngine_Deferred.cpp",
+		"/media/giletp01/Dev/Dev/GobLim-student/MyProject/Sources/SampleEngine_Deferred.h",
+		"/media/giletp01/Dev/Dev/GobLim-student/run.sh",
+		"/media/giletp01/Dev/Dev/GobLim-student/Core/Utils/Logger/ImGUILogger.cpp",
+		"/media/giletp01/Dev/Dev/GobLim-student/LinuxSublimeSolution/Makefile",
+		"/media/giletp01/Dev/Dev/GobLim-student/Core/Engine/OpenGL/Lighting/LightingModelGL.cpp",
+		"/media/giletp01/Dev/Dev/GobLim-student/Core/Engine/Base/Lighting/LightingModel.h",
+		"/media/giletp01/Dev/Dev/GobLim-student/Core/Engine/OpenGL/DeferredEngineGL.cpp",
+		"/media/giletp01/Dev/Dev/GobLim-student/Core/Engine/Base/Scene.cpp",
+		"/media/giletp01/Dev/Dev/GobLim-student/Core/Engine/OpenGL/deferredSceneLoaderGL.h",
+		"/media/giletp01/Dev/Dev/GobLim-student/Core/Utils/imgui/imgui.cpp",
+		"/media/giletp01/Dev/Dev/GobLim-student/Core/Engine/OpenGL/deferredSceneLoaderGL.cpp",
+		"/media/giletp01/Dev/Dev/GobLim-student/Core/Utils/json-develop/JsonParser/JsonParser/stdafx.h",
+		"/media/giletp01/Dev/Dev/GobLim-student/Core/Utils/json-develop/JsonParser/JsonParser/targetver.h",
+		"/media/giletp01/Dev/Dev/GobLim-student/Core/Utils/json-develop/test/src/unit-constructor2.cpp",
+		"/media/giletp01/Dev/Dev/GobLim-student/Core/Utils/json-develop/doc/examples/at__object_t_key_type.cpp",
+		"/media/giletp01/Dev/Dev/GobLim-student/Core/Utils/json-develop/doc/examples/at__object_t_key_type_const.cpp",
+		"/media/giletp01/Dev/Dev/GobLim-student/Core/Utils/json-develop/doc/examples/at__size_type.cpp",
+		"/media/giletp01/Dev/Dev/GobLim-student/Core/Utils/json-develop/doc/examples/at_json_pointer.cpp",
+		"/media/giletp01/Dev/Dev/GobLim-student/Core/Utils/json-develop/doc/examples/at_json_pointer_const.cpp",
+		"/media/giletp01/Dev/Dev/GobLim-student/Core/Materials/BRDFMaterial/BRDFMaterial.hpp",
+		"/media/giletp01/Dev/Dev/GobLim-student/Core/Engine/Base/MaterialLoader/MaterialLoader.hpp",
+		"/media/giletp01/Dev/Dev/GobLim-student/Core/Utils/Logger/ImGuiLogger.h",
+		"/media/giletp01/Dev/Dev/GobLim-student/Core/Utils/json-develop/benchmarks/benchmarks.cpp",
+		"/media/giletp01/Dev/Dev/GobLim-student/Core/Utils/json-develop/doc/examples/array.cpp",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/MyProject/Sources/SampleEngine.cpp",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/Engine/Base/Camera.cpp",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/Engine/OpenGL/CameraGL.cpp",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/MyProject/Sources/Main.back",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/MyProject/Sources/Main.cpp",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/MyProject/Sources/GoblimApplication.h",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/Engine/OpenGL/EngineGL.cpp",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/Engine/OpenGL/SceneLoaderGL.cpp",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/GPUResources/Buffers/GPUBuffer.cpp",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/MyProject/Sources/GoblimApplication.cpp",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/LinuxSublimeSolution/bin/logs/myeasylog.log",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/LinuxSublimeSolution/bin/logs/Trace.log",
+		"/home/giletp01/Dropbox/Enseignement/L3/2015-2016/Reunion Rentrée/ReunionRentree.html",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/Engine/Base/Scene.h",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/Engine/OpenGL/v4/GLProgramSource.cpp",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/MyProject/Effects/DeferredEffect/DeferredEffect.cpp",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/Engine/OpenGL/Managers/GLUniformBlock.h",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/Engine/OpenGL/Managers/GLUniformManager.h",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/Engine/OpenGL/Managers/GPUVariable.hpp",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/Engine/OpenGL/ModelGL.h",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/Engine/OpenGL/SceneLoaderGL.h",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/Engine/OpenGL/v4/GLProgram.h",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/Engine/OpenGL/v4/GLProgramPipeline.h",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/Engine/OpenGL/v4/GLProgramSource.h",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/Engine/OpenGL/Managers/GLProgramsSourceManager.h",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/Engine/OpenGL/Lighting/LightingModelGL.h",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/Engine/OpenGL/BoundingBox/BoundingBoxModelGL.h",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/Engine/Base/Node.h",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/Engine/Base/GeometricModel.h",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/Engine/Base/Frame.h",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/GPUResources/Buffers/GPUBuffer.h",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/GPUResources/Buffers/GPUIBuffer.h",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/GPUResources/FBO/GPUFBO.h",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/GPUResources/GPUInfo.h",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/GPUResources/Query/GPUQuery.h",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/GPUResources/Textures/GPUTexImage.h",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/GPUResources/Textures/GPUTexImage2D.h",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/GPUResources/Textures/GPUTexImage2DArray.h",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/GPUResources/Textures/GPUTexture.h",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/GPUResources/Textures/GPUTexture1D.h",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/GPUResources/Textures/GPUTexture2D.h",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/GPUResources/Textures/GPUTexture2DArray.h",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/GPUResources/TransformFeedback/GPUTransformFeedback.h",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/Utils/GLError.h",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/Utils/ImageReader/ImageReader.cpp",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/Utils/ImageUtilities/ImageUtils.h",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/Engine/Base/Scene.cpp",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/Engine/Base/Singleton.h",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/LinuxSublimeSolution/Makefile",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/Test/Main.cpp",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/MyProject/Sources/SampleEngine.h",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/Engine/Base/Resource_mgr.hpp",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/Engine/Base/GeometricModel.cpp",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/GPUResources/TransformFeedback/GPUTransformFeedback.cpp",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/Engine/Base/XMLLoader.cpp",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/Effects/ComputeShaderTest2/ComputeShaderTest2.h",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/Effects/ComputeShaderTest/ComputeShaderTest.h",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/Effects/Shadow/Shadow.h",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/Effects/Shadow/Shadow.cpp",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/Materials/GBuffersMaterial/GBuffersMaterial.h",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/Materials/GBuffersMaterial/GBuffersMaterial.cpp",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/Effects/LspComputeShader/LspComputeShader.h",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/Effects/LspComputeShader/LspComputeShader.cpp",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/Effects/ComputeShaderTest/ComputeShaderTest.cpp",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/Utils/Constants.h",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/Engine/Base/Frustum.h",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/Engine/Base/Frustum.cpp",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/Materials/DeferredMaterial/DeferredMaterial.h",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/Engine/Base/Lighting/ShadowModel.h",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/Effects/ComputeShaderTest2/ComputeShaderTest2.cpp",
+		"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core/Effects/PostProcess/PostProcess.h",
+		"/home/giletp01/Dropbox/Dev/Goblim-Core/LinuxSublimeSolution/ep.sh",
+		"/home/kolwyn/Dropbox/Admin/AFIG/CAAFIG-Mars2016",
+		"/home/kolwyn/Téléchargements/correlation_de_phase/correlation_de_phase/src/fft_image.cc",
+		"/home/kolwyn/.PlayOnLinux/wineprefix/PillarsOfEternity/drive_c/GOG Games/Day of the Tentacle Remastered/controllerdef.txt",
+		"/home/kolwyn/Téléchargements/correlation_de_phase/correlation_de_phase/src/phase_correlation.cc",
+		"/home/kolwyn/Téléchargements/T/Bad Manners/BadManners.sh",
+		"/home/kolwyn/.local/share/Steam/SteamApps/common/dota 2 beta/dota/cfg/autoexec.cfg",
+		"/home/kolwyn/.local/share/Steam/SteamApps/common/dota 2 beta/game/dota/cfg/autoexec.cfg",
+		"/home/kolwyn/Téléchargements/T/FastQSP-master/FastQSP.pro",
+		"/FastQSP.pro",
+		"/home/kolwyn/Téléchargements/Simple_effect_apply_on_FBO/SampleEngine.cpp",
+		"/home/kolwyn/Dropbox/Dev/spectralnoise/spectralv2/spectralv2/spectralnoise/blue-5.5.noi",
+		"/home/kolwyn/Dropbox/Dev/Goblim-Core/Core/Effects/PostProcess/DeferredShading/DeferredShading.cpp",
+		"/home/kolwyn/Téléchargements/Simple_effect_apply_on_FBO/Volumetric/Volumetric.cpp",
+		"/home/kolwyn/Téléchargements/Core+MyProject/Core/Effects/PostProcess/DeferredShading/Shaders/DS-Shading-FS.glsl",
+		"/home/kolwyn/Téléchargements/Core+MyProject/Core/Effects/PostProcess/DeferredShading/Shaders/DS-Shading-AO-FS.glsl"
+	],
+	"find":
+	{
+		"height": 34.0
+	},
+	"find_in_files":
+	{
+		"height": 90.0,
+		"where_history":
+		[
+			"/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/Core,/home/giletp01/Dropbox/Dev/Goblim-v2-Nanogui/MyProject",
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"COPY",
+			"\\",
+			"camDir",
+			"camSpeedFactor",
+			"Initializing Scene",
+			"engine->init();",
+			"oldMouse",
+			"ffffffff",
+			"glew",
+			"GL/glew.h",
+			"glew.h",
+			"init",
+			"update",
+			"\\",
+			"/",
+			"../Libraries/include/GL/glew.h",
+			"refreshCamera",
+			"GLFW_CURSOR_HIDDEN",
+			"SampleEngine",
+			"loadFrom",
+			"DOF",
+			"nearFocal",
+			"nearLocal",
+			"();\n",
+			"lastDelta",
+			"INFO",
+			"LOG",
+			"deferredShading",
+			"tonema",
+			"Pi",
+			"\t\t\t\t  &",
+			"getmaterial",
+			"noise",
+			"Perlin",
+			"Simplex",
+			"FastG",
+			"request_26_points",
+			"mouth full",
+			"></",
+			"<span class=\"built_in\">",
+			"<span class=\"variable\">",
+			"<span class=\"string\">",
+			"lang-c",
+			"<span class=\"comment\">",
+			"<span class=\"number\">",
+			"</span>",
+			" <span class=\"comment\">",
+			"<span class=\"keyword\">",
+			"pre",
+			"java",
+			"Nico",
+			"Nico\\Utils",
+			"Nico/Utils",
+			"Nico",
+			"0",
+			"noise_2",
+			"noise_1",
+			"load2DTexture",
+			"printf(\" ",
+			".-",
+			"MCNoiseMaterial",
+			"GPUStratifiedMCNoise",
+			"MCNoiseMaterial",
+			"GPUMCNoise",
+			"GLFWGPUBoxNoiseEditor",
+			"s",
+			"GPUScalarNoise",
+			"ScalarNoiseMaterial",
+			"frequ",
+			"2",
+			"1",
+			"0",
+			"BoxNoiseMaterial",
+			"GPUColorNoise",
+			"getRoot"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"/",
+			"glad/glad.h",
+			"DeferredEngineGL",
+			"2",
+			"noise[1]",
+			"noise[0]",
+			"err_mess = ",
+			"StratifiedMCNoiseMaterial",
+			"GPUStratifiedMCNoise",
+			"GLFWGPUMCNoiseEditor",
+			"MCNoiseMaterial",
+			"ScalarNoiseMaterial",
+			"calarNoiseMaterial",
+			"GPUScalarNoise"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 7,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "/media/giletp01/Dev/Dev/TestGStudent/MyProject/Materials/BaseMaterial/BaseMaterial.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 601,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								87,
+								87
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 15,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "/media/giletp01/Dev/Dev/TestGStudent/Core/Engine/OpenGL/EngineGL.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5011,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4042,
+								4042
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1647.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 14,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "/media/giletp01/Dev/Dev/TestGStudent/Core/Engine/OpenGL/EngineGL.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 6394,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5979,
+								5979
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 3259.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 9,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "/media/giletp01/Dev/Dev/TestGStudent/Core/Engine/Base/Lighting/LightingModel.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1201,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								917,
+								917
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 394.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "/media/giletp01/Dev/Dev/TestGStudent/Core/Engine/OpenGL/EngineGLState.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 438,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								239,
+								239
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 13,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "/media/giletp01/Dev/Dev/TestGStudent/Core/GPUResources/FBO/GPUFBO.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 10586,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								10287,
+								10287
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 6094.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "Makefile",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 8441,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								6059,
+								6059
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Makefile/Makefile.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 2981.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "/media/giletp01/Dev/Dev/TestGStudent/run.sh",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 93,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								93,
+								93
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/ShellScript/Shell-Unix-Generic.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "/media/giletp01/Dev/Dev/TestGStudent/MyProject/Sources/SampleEngine.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1649,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								913,
+								913
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 90.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "/media/giletp01/Dev/Dev/TestGStudent/Core/Utils/Constants.h",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 878,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								231,
+								231
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 10,
+					"file": "/media/giletp01/Dev/Dev/TestGStudent/Core/Materials/BRDFMaterial/BRDFMaterial.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 7919,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2690,
+								2690
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1009.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 12,
+					"type": "text"
+				},
+				{
+					"buffer": 11,
+					"file": "/media/giletp01/Dev/Dev/TestGStudent/Core/Materials/ColorMaterial/ColorMaterial.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1259,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								401,
+								401
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 342.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 12,
+					"file": "/media/giletp01/Dev/Dev/TestGStudent/Core/Materials/ColorMaterial/ColorMaterial.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 581,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								345,
+								345
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 10,
+					"type": "text"
+				},
+				{
+					"buffer": 13,
+					"file": "/media/giletp01/Dev/Dev/TestGStudent/Core/Engine/Base/Lighting/LightNode.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3965,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1473,
+								1473
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 972.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 14,
+					"file": "/media/giletp01/Dev/Dev/TestGStudent/Core/Engine/OpenGL/EngineGLState.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 617,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								107,
+								107
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 15,
+					"file": "/media/giletp01/Dev/Dev/TestGStudent/Core/Engine/Base/Lighting/LightNode.hpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1329,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								763,
+								763
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 360.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 11,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 23.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 426.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "Custom Make",
+	"project": "Goblim.sublime-project",
+	"replace":
+	{
+		"height": 62.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"gpumc",
+				"GPUResources/Noise/GPUMCNoise.cpp"
+			],
+			[
+				"gpcolo",
+				"GPUResources/Noise/GPUColorNoise.cpp"
+			],
+			[
+				"parti",
+				"Materials/ParticlesMaterial/ParticlesMaterial.h"
+			],
+			[
+				"gpup",
+				"GPUResources/Particles/GPUParticles.cpp"
+			],
+			[
+				"editor",
+				"Externs/GLFWGPUBoxNoiseEditor/GLFWGPUBoxNoiseEditor.cpp"
+			],
+			[
+				"main",
+				"Main.cpp"
+			],
+			[
+				"uni",
+				"Engine/OpenGL/Managers/GLUniformManager.h"
+			],
+			[
+				"gpuva",
+				"Engine/OpenGL/Managers/GPUVariable.hpp"
+			],
+			[
+				"effect",
+				"Engine/OpenGL/EffectGL.cpp"
+			],
+			[
+				"scene",
+				"Engine/Base/Scene.h"
+			],
+			[
+				"sce",
+				"Engine/Base/Scene.cpp"
+			],
+			[
+				"",
+				"Effects/LightScattering/Shaders/Base-VS.glsl"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"",
+				"~/Dropbox/Enseignement/L3/WebGL/WebGL.sublime-project"
+			]
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 246.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
