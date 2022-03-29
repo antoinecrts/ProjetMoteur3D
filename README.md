@@ -1,4 +1,4 @@
-# ProjetMoteur3D
+# Projet de Moteur 3D
 
 Réalisation d'une scène à travers une application de visualisation interactive de scènes 3D utilisée à 
 l'université de Limoges. Récupération d'un modèle librement disponible sur internet. Mise en place d'une fonction 
